@@ -7,7 +7,7 @@
 @section('content')
     <div class="container">
         <h3>Editando aluguel ID: <span class="fw-bold">{{$rent->id }}</span></h3>
-        <form method="POST" action="{{route('rents.update', ['id' => $rent->id])}}" >
+        <form method="POST" action="{{route('rents.update', ['rent' => $rent->id])}}" >
             @csrf
             @method('PUT')
 

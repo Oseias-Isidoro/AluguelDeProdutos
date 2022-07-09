@@ -13,7 +13,7 @@
     </div>
 
     @foreach($rents as $rent)
-        <a href="{{route('rents.edit', ['id' => $rent->id])}}">
+        <a href="{{route('rents.edit', ['rent' => $rent->id])}}">
             <div class="product {{ $rent->getCssStatus() }}  d-flex p-2 my-2 text-white rounded">
                 <img src="{{asset($rent->product->img_path)}}" class="img-thumbnail flex-shrink-1" width="100" alt="...">
                 <div class="w-100 p-2">
