@@ -32,6 +32,27 @@ class RentService
         return $rent;
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function updateRentsStatus()
+    {
+        $rents = $this->getLateRents();
+
+        foreach ($rents as $rent)
+        {
+            if (!$rent->update(['status' => 'late']))
+                throw new \Exception("error in update rent status to late");
+        }
+    }
+
+    private function getLateRents()
+    {
+        return Rents::whereRaw('lease_end_date < CURRENT_TIMESTAMP()')
+            ->whereNotIn('status', array('finished', 'late'))
+            ->get();
+    }
+
     public function paginatedRentals(int $count): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         return Rents::with(['product', 'customer'])
