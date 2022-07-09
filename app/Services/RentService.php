@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Rents;
+use App\Scopes\ShopScope;
 
 class RentService
 {
@@ -48,7 +49,8 @@ class RentService
 
     private function getLateRents()
     {
-        return Rents::whereRaw('lease_end_date < CURRENT_TIMESTAMP()')
+        return Rents::withoutGlobalScope(ShopScope::class)
+            ->whereRaw('lease_end_date < CURRENT_TIMESTAMP()')
             ->whereNotIn('status', array('finished', 'late'))
             ->get();
     }
