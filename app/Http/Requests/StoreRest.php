@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreRest extends FormRequest
 {
@@ -52,5 +53,13 @@ class StoreRest extends FormRequest
         return [
             'required' => 'O campo ":attribute" é obrigatorio',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'user_id' => Auth::user()->id,
+            'status' => 'in_progress'
+        ]);
     }
 }
