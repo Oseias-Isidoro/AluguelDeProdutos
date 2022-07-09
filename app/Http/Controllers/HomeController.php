@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rents;
 use App\Services\RentService;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -17,8 +14,7 @@ class HomeController extends Controller
      */
     public function index(): Renderable
     {
-        /** @noinspection PhpParamsInspection */
-        $rents = (new RentService(Auth::user()))
+        $rents = (new RentService())
             ->paginatedRentals(10);
 
         return view('home', compact('rents'));
