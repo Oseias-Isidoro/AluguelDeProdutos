@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Models\Rents;
+use App\Services\RentService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -20,24 +21,14 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function(){
-            $rents = Rents::whereRaw('lease_end_date < CURRENT_TIMESTAMP()')
-                ->where('status', '<>', 'finished')
-                ->where('status', '<>', 'late')
-                ->get();
-
-            foreach ($rents as $rent)
-            {
-                $rent->status = 'late';
-                if (!$rent->save())
-                    throw new \Exception("error in update rent status to late");
-            }
-        })->everyMinute();
+            (new RentService())->updateRentsStatus();
+        })->everyFiveMinutes();
     }
 
     /**
