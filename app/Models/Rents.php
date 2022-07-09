@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\ShopScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -9,6 +10,19 @@ class Rents extends Model
 {
     use SoftDeletes;
     public $timestamps = true;
+
+    protected $fillable = [
+        'user_id',
+        'customer_id',
+        'product_id',
+        'lease_start_date',
+        'lease_end_date',
+        'additional_charge',
+        'maintenance_cost',
+        'damage_rate',
+        'status',
+        'cost',
+    ];
 
     public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -42,5 +56,15 @@ class Rents extends Model
                 return 'bg-success';
                 break;
         }
+    }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new ShopScope());
     }
 }
