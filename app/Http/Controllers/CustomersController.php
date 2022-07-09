@@ -43,7 +43,7 @@ class CustomersController extends Controller
     {
         (new CustomerService())->create($request->toArray());
 
-        return redirect()->route('customers')
+        return redirect()->route('customers.index')
             ->with('success', 'Cliente salvo com sucesso!.');
     }
 
