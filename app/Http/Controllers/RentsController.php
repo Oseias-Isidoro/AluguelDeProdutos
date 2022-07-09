@@ -26,9 +26,8 @@ class RentsController extends Controller
      */
     public function store(StoreRest $request): \Illuminate\Http\RedirectResponse
     {
-        /** @noinspection PhpParamsInspection */
-        (new RentService(Auth::user()))
-            ->create($request);
+        (new RentService())
+            ->create($request->toArray());
 
         return redirect()
             ->route('home')
@@ -39,7 +38,7 @@ class RentsController extends Controller
     {
         $rent = Rents::find($id);
         $customers = Customers::get();
-        $products = Products::where('user_id', Auth::id())->get();
+        $products = Products::get();
 
         return view('rents.edit', compact('rent', 'customers', 'products'));
     }
@@ -49,8 +48,8 @@ class RentsController extends Controller
      */
     public function update($id, UpdateRent $request): RedirectResponse
     {
-        (new RentService(Auth::user()))
-            ->update($id, $request);
+        (new RentService())
+            ->update($id, $request->toArray());
 
         return redirect()
             ->route('home')
