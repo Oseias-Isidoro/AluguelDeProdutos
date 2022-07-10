@@ -12,6 +12,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed $price
  * @property mixed $inventory
  * @method static find($id)
+ * @method static get()
+ * @method static where(string $string, int|string|null $id)
+ * @method static orderBy(string $string, string $string1)
+ * @method static create(array $product_data)
  */
 class Products extends Model
 {
