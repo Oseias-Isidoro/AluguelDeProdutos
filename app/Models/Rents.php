@@ -4,12 +4,22 @@ namespace App\Models;
 
 use App\Scopes\ShopScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @method static find($id)
+ * @method static withoutGlobalScope(string $class)
+ * @method whereRaw(string $string)
+ * @method static create(array $rent_data)
+ * @property mixed $status
+ */
 class Rents extends Model
 {
     use SoftDeletes;
     public $timestamps = true;
+
+    protected $guarded = [];
 
     protected $fillable = [
         'user_id',
@@ -24,12 +34,12 @@ class Rents extends Model
         'cost',
     ];
 
-    public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Products::class, 'product_id');
     }
 
-    public function customer()
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customers::class, 'customer_id');
     }
@@ -37,25 +47,19 @@ class Rents extends Model
     public function progress()
     {
         return $this->whereRaw('ABS(TIMESTAMPDIFF(MINUTE, lease_start_date,  lease_end_date)) > ')
-            ->where('status', '<>', 'converted')
-            ->where('status', '<>', 'expired')
+            ->whereNotIn('status', array('converted', 'expired'))
             ->get();
     }
 
-    public function getCssStatus()
+    public function getCssStatus(): string
     {
-        switch ($this->status)
-        {
-            case 'in_progress':
-                return 'bg-primary';
-                break;
-            case 'late':
-                return 'bg-danger';
-                break;
-            case 'finished':
-                return 'bg-success';
-                break;
-        }
+        $css_class_status = [
+            'in_progress' => 'bg-primary',
+            'late' => 'bg-danger',
+            'finished' => 'bg-success'
+        ];
+
+        return $css_class_status[$this->status];
     }
 
     /**
