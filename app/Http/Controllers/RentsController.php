@@ -8,6 +8,7 @@ use App\Models\Customers;
 use App\Models\Products;
 use App\Models\Rents;
 use App\Services\RentService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,9 +23,9 @@ class RentsController extends Controller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function store(StoreRest $request): \Illuminate\Http\RedirectResponse
+    public function store(StoreRest $request): RedirectResponse
     {
         (new RentService())
             ->create($request->toArray());
@@ -44,7 +45,7 @@ class RentsController extends Controller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function update($id, UpdateRent $request): RedirectResponse
     {

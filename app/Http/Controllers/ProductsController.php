@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProduct;
 use App\Http\Requests\UpdateProduct;
 use App\Models\Products;
 use App\Services\ProductService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 
 class ProductsController extends Controller
@@ -32,7 +33,7 @@ class ProductsController extends Controller
     /**
      * @param StoreProduct $request
      * @return RedirectResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(StoreProduct $request): RedirectResponse
     {
@@ -45,7 +46,7 @@ class ProductsController extends Controller
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function update($id, UpdateProduct $request): RedirectResponse
     {

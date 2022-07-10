@@ -4,37 +4,39 @@ namespace App\Services;
 
 use App\Models\Rents;
 use App\Scopes\ShopScope;
+use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RentService
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function create(array $rent_data): Rents
     {
         $rest = Rents::create($rent_data);
 
         if (!$rest)
-            throw new \Exception('Error at save rent');
+            throw new Exception('Error at save rent');
 
         return $rest;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(int $id, array $rent_data): Rents
     {
         $rent = Rents::find($id);
 
         if (!$rent->update($rent_data))
-            throw new \Exception('Error at updating rent');
+            throw new Exception('Error at updating rent');
 
         return $rent;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function updateRentsStatus()
     {
@@ -43,7 +45,7 @@ class RentService
         foreach ($rents as $rent)
         {
             if (!$rent->update(['status' => 'late']))
-                throw new \Exception("error in update rent status to late");
+                throw new Exception("error in update rent status to late");
         }
     }
 
@@ -55,7 +57,7 @@ class RentService
             ->get();
     }
 
-    public function paginatedRentals(int $count): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function paginatedRentals(int $count): LengthAwarePaginator
     {
         return Rents::with(['product', 'customer'])
             ->orderBy('id', 'DESC')
